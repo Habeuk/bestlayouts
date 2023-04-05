@@ -1,0 +1,14 @@
+{
+    "name": "stephane/bestlayouts",
+    "description": "contient de jolies layouts plus des paragraphes pret à l'emploi",
+    "type": "drupal-custom-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "kouwa stephane",
+            "email": "kksasteph888@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

@@ -1,0 +1,15 @@
+bestlayouts.example:
+  path: '/bestlayouts/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\bestlayouts\Controller\BestlayoutsController::build'
+  requirements:
+    _permission: 'access content'
+
+bestlayouts.settings_form:
+  path: '/admin/config/system/bestlayouts'
+  defaults:
+    _title: 'bestlayouts settings'
+    _form: 'Drupal\bestlayouts\Form\SettingsForm'
+  requirements:
+    _permission: 'administer bestlayouts configuration'

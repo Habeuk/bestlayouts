@@ -1,0 +1,4 @@
+administer bestlayouts configuration:
+  title: 'Administer bestlayouts configuration'
+  description: 'Optional description.'
+  restrict access: true

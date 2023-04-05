@@ -1,0 +1,6 @@
+bestlayouts.settings_form:
+  title: 'bestlayouts'
+  description: 'Configure bestlayouts.'
+  parent: system.admin_config_system
+  route_name: bestlayouts.settings_form
+  weight: 10
