@@ -1,0 +1,32 @@
+{% if content %}
+<div {{ attributes.addClass(['facmaster-button-right','container'])}}>
+    <!--div class="col-lg-6"-->
+        <div class="facmaster-button-right__left col-lg-6">
+            {% if content.subtitle %}
+            <{{settings.region_tag_subtitle}} {{ region_attributes.subtitle.addClass(['facmaster-button-right__left_subtitle'])}}>
+                {{ content.subtitle }}
+            </{{settings.region_tag_subtitle}}>
+            {% endif %}
+            {% if content.title %}
+            <{{settings.region_tag_title}} {{ region_attributes.title.addClass(['facmaster-button-right__left_title'])}}>
+                {{ content.title }}
+            </{{settings.region_tag_title}}>
+            {% endif %}
+            {% if content.text %}
+            <div {{ region_attributes.text.addClass(['facmaster-button-right__left_text'])}}>
+                {{ content.text }}
+            </div>
+            {% endif %}
+        </div>
+    <!--/div-->
+    <!--div class="col-lg-6"-->
+        <div class="facmaster-button-right__right col-lg-6">
+            {% if content.button %}
+                {% for i in content.button|array_elements(region_attributes.button.addClass(['facmaster-button-right__right_button'])) %}
+                    {{ i }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    <!--/div-->
+</div>
+{% endif %}
