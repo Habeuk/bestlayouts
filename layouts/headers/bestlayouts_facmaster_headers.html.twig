@@ -1,0 +1,204 @@
+{% if content %}
+<header {{ attributes.addClass('facmaster-header') }}>
+  <div>
+    <div class="site-header-top">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="{{ settings.class_header_top_left }}" >
+          	{% if content.header_top_left %}
+                <div {{ region_attributes.header_top_left.addClass('header-top-left') }}>
+                  {{ content.header_top_left }}
+                </div>
+            {% endif %}
+          </div>
+          <div class="col d-flex justify-content-lg-end">
+            <div class="header-top-right d-flex flex-wrap">
+              {% if content.header_langdown %}
+              	<div {{ region_attributes.header_langdown }}>
+              		{{ content.header_langdown }}
+              	</div>              
+              {% endif %}
+              <!-- Icones dynamiques -->
+              {% if content.buttons_icone %}
+              	{{ content.buttons_icone|layout_value }}              
+              {% endif %}              
+              <!-- Icones statique -->
+              <div
+                class="field-buttons d-flex field-buttons--background field-buttons--hover_primary_text border-full-light icones-statique"
+              >
+                <div
+                  class="d-flex item"
+                  data-toggle="modal"
+                  data-target="#modal-cart-d9-hbk"
+                >
+                  <div class="svg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 576 512"
+                    >
+                      <path
+                        d="M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z"
+                      />
+                    </svg>
+                  </div>
+                  <span class="cart_counter_header">0</span>
+                </div>
+                <div
+                  class="d-flex item"
+                  data-toggle="modal"
+                  data-target="#modal-search-d9-hbk"
+                >
+                  <div class="svg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 512 512"
+                    >
+                      <path
+                        d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="d-flex item">
+                  <a class="svg" href="/user"><i class="fas fa-sign-in-alt"></i></a>
+                </div>
+              </div>
+              <!-- End icones statique  -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-header-middle">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 d-flex align-items-center">
+          	{% if content.site_branding %}
+                <div {{ region_attributes.site_branding.addClass(['site-branding','w-100']) }}>
+                  {{ content.site_branding }}
+                </div>
+            {% endif %}
+          </div>
+          <div class="col-md-9 d-flex align-items-center">
+          <!-- fields-svg -->
+          	{% if content.fields_info %}
+          		{{ content.fields_info|layout_value }}
+          	{% endif %}            
+            <!-- end fields-svg -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="site-header-main" data-hbk="scroll">
+      <div class="container">
+        <div class="container-menu">        	
+          <div class="fnews-header">
+            <nav class="first-nav justify-content-between">
+              <div class="first-nav__brand">
+               {{ content.site_branding }}
+              </div>
+              <div href="#" class="menu-icons">
+                <span class="burger"> <i class="wbu-bars"></i></span>
+                <span class="xmark"> <i class="wbu-close"></i></span>
+              </div>
+              <!-- menus -->
+              {% if content.menu %}
+                <div {{ region_attributes.menu }}>
+                	 {{ content.menu }}
+                </div>
+              {% endif %}
+              <!-- End menus -->
+              {{ content.call_to_action|layout_value }}              
+            </nav>
+          </div>          
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- model search-->
+  <div
+    class="modal fade modal-search"
+    id="modal-search-d9-hbk"
+    tabindex="-1"
+    aria-labelledby="modal-search-d9-hbkLabel"
+    aria-hidden="true"
+    data-backdrop="static"
+    data-keyboard="false"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <button
+          type="button"
+          class="close h2"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 1000 1000"
+            enable-background="new 0 0 1000 1000"
+            xml:space="preserve"
+          >
+            <g>
+              <path
+                d="M401.2,500L30.4,870.9c-26.9,26.9-27,71.3,0.2,98.5c27.5,27.5,71.4,27.4,98.5,0.2L500,598.8l370.9,370.9c26.9,26.9,71.3,27,98.5-0.2c27.5-27.5,27.4-71.4,0.2-98.5L598.8,500l370.9-370.9c26.9-26.9,27-71.3-0.2-98.5C941.9,3.1,898,3.2,870.9,30.4L500,401.2L129.1,30.4c-26.9-26.9-71.3-27-98.5,0.2C3.1,58.1,3.2,102,30.4,129.1L401.2,500L401.2,500z"
+              />
+            </g>
+          </svg>
+        </button>
+        {% if content.search %}
+            <div {{ region_attributes.search.addClass('modal-body') }}>
+              {{ content.search }}
+            </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <!-- model cart-->
+  <div
+    class="modal fade modal-cart"
+    id="modal-cart-d9-hbk"
+    tabindex="-1"
+    aria-labelledby="modal-cart-d9-hbkLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog d-flex justify-content-end">
+      <div class="modal-content">
+        <button
+          type="button"
+          class="close h2"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px"
+            y="0px"
+            viewBox="0 0 1000 1000"
+            enable-background="new 0 0 1000 1000"
+            xml:space="preserve"
+          >
+            <g>
+              <path
+                d="M401.2,500L30.4,870.9c-26.9,26.9-27,71.3,0.2,98.5c27.5,27.5,71.4,27.4,98.5,0.2L500,598.8l370.9,370.9c26.9,26.9,71.3,27,98.5-0.2c27.5-27.5,27.4-71.4,0.2-98.5L598.8,500l370.9-370.9c26.9-26.9,27-71.3-0.2-98.5C941.9,3.1,898,3.2,870.9,30.4L500,401.2L129.1,30.4c-26.9-26.9-71.3-27-98.5,0.2C3.1,58.1,3.2,102,30.4,129.1L401.2,500L401.2,500z"
+              />
+            </g>
+          </svg>
+        </button>
+        {% if content.cart %}
+            <div {{ region_attributes.cart.addClass('modal-body') }}>
+              {{ content.cart }}
+            </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+{% endif %}

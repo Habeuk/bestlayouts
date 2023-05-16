@@ -1,6 +1,22 @@
 <?php
 
 /**
+ *
  * @file
  * Primary module hooks for bestlayouts module.
  */
+
+/**
+ * Implements hook_theme().
+ */
+function bestlayouts_theme() {
+  // pre-formatage et template pour le menu.
+  $hooks['layoutmenu_bestlayouts_first_menu'] = [
+    'render element' => 'element',
+    'preprocess functions' => [
+      'template_preprocess_layoutmenu_bestlayouts_first_menu'
+    ],
+    'file' => 'bestlayouts.theme.inc'
+  ];
+  return $hooks;
+}
