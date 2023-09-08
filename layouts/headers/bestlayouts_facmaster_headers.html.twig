@@ -108,8 +108,10 @@
                 	 {{ content.menu }}
                 </div>
               {% endif %}
-              <!-- End menus -->
-              {{ content.call_to_action|layout_value }}              
+              <!-- End menus -->     
+              {% for item in content.call_to_action|array_elements(region_attributes.call_to_action.addClass('call_to_action')) %}
+    		      {{ item }}
+    	      {% endfor %}       
             </nav>
           </div>          
         </div>
