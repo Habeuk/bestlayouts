@@ -9,54 +9,43 @@ use Drupal\formatage_models\Plugin\Layout\Sections\FormatageModelsSection;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * A contact section layout from bestlayouts
+ * Ce menu a pour objectif d'etre le plus dynamique possible.
+ * il permet de gerer entirement l'entete d'un site.
  *
  * @Layout(
- *   id = "bestlayouts_facmaster_headers",
+ *   id = "bestlayouts_dynamiques_headers",
  *   label = @Translation(" Bestlayous : header"),
  *   category = @Translation("bestlayouts"),
  *   path = "layouts/headers",
- *   template = "bestlayouts_facmaster_headers",
- *   library = "bestlayouts/bestlayouts_facmaster_headers",
+ *   template = "bestlayouts_dynamiques_headers",
+ *   library = "bestlayouts/bestlayouts_dynamiques_headers",
  *   default_region = "header_top_left",
  *   regions = {
  *     "header_top_left" = {
- *       "label" = @Translation("header_top_left"),
+ *       "label" = @Translation("header top left"),
  *     },
- *     "header_langdown" = {
- *       "label" = @Translation("header_langdown"),
+ *     "header_top_center" = {
+ *       "label" = @Translation("header_top_center"),
  *     },
- *     "description" = {
- *       "label" = @Translation("description"),
+ *     "header_top_right" = {
+ *       "label" = @Translation("header_top_right"),
  *     },
- *     "buttons_icone" = {
- *       "label" = @Translation("buttons_icone"),
- *     },
- *     "buttons_icone" = {
- *       "label" = @Translation("buttons_icone"),
- *     },
- *     "site_branding" = {
- *       "label" = @Translation("site_branding"),
- *     },
- *     "fields_info" = {
- *       "label" = @Translation("fields_info"),
+ *     "logo" = {
+ *       "label" = @Translation("Logo"),
  *     },
  *     "menu" = {
  *       "label" = @Translation("menu"),
  *     },
- *     "call_to_action" = {
- *       "label" = @Translation("call_to_action"),
+ *     "right_menu" = {
+ *       "label" = @Translation("right_menu"),
  *     },
  *     "search" = {
  *       "label" = @Translation("search"),
  *     },
- *     "cart" = {
- *       "label" = @Translation("cart"),
- *     },
  *   }
  * )
  */
-class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
+class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
 
   /**
    *
@@ -66,13 +55,18 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
   public function __construct(array $configuration, $plugin_id, $plugin_definition, StylesGroupManager $styles_group_manager) {
     // TODO Auto-generated method stub
     parent::__construct($configuration, $plugin_id, $plugin_definition, $styles_group_manager);
-    $this->pluginDefinition->set('icon', $this->pathResolver->getPath('module', 'bestlayouts') . "/icones/headers/bestlayouts_facmaster_headers.png");
+    $this->pluginDefinition->set('icon', $this->pathResolver->getPath('module', 'bestlayouts') . "/icones/headers/bestlayouts_dynamiques_headers.png");
   }
 
   function defaultConfiguration() {
     return [
-      'load_libray' => true,
-      'class_header_top_left' => 'col-md-5 d-none d-lg-block'
+      'containt_menu' => '',
+      "derivate" => [
+        'value' => 'style-merseille',
+        'options' => [
+          'style-merseille' => 'style-merseille'
+        ]
+      ]
     ] + parent::defaultConfiguration();
   }
 
@@ -83,10 +77,10 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['class_header_top_left'] = [
+    $form['containt_menu'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('class_header_top_left'),
-      '#default_value' => $this->configuration['class_header_top_left']
+      '#title' => $this->t('containt_menu'),
+      '#default_value' => $this->configuration['containt_menu']
     ];
     return $form;
   }
@@ -98,7 +92,7 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
-    $this->configuration['class_header_top_left'] = $form_state->getValue('class_header_top_left');
+    $this->configuration['containt_menu'] = $form_state->getValue('containt_menu');
   }
 
   /**
@@ -113,8 +107,28 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
     if (is_array($build['menu'])) {
       $build['menu'] = $this->getMenus($build['menu']);
     }
+    if ($build['search']) {
+      $build['search'] = $this->FormatSearchForm($build['search']);
+    }
 
     return $build;
+  }
+
+  public function FormatSearchForm(array $searchs) {
+    $newSearchs = [];
+    $attributes = $searchs['#attributes'];
+    foreach ($searchs as $search) {
+      if (!empty($search['#theme'])) {
+        if ($attributes)
+          $search['content']['#attributes'] = $attributes;
+        if (!empty($search['content']['#form_id']) && $search['content']['#form_id'] == 'search_block_form') {
+          $search['content']['#theme'][] = 'bestlayouts_form_search_style_merseille';
+        }
+        $newSearchs[] = $search['content'];
+      }
+    }
+    // dump($newSearchs);
+    return $newSearchs;
   }
 
   /**
@@ -122,10 +136,21 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
    * {@inheritdoc}
    */
   private function getMenus(array $menu_nav) {
+    /**
+     *
+     * @var \Drupal\Core\Url $dop
+     */
+    // $dop->toString();
+    /**
+     * on retourne directement le menu sans passer par les blocks.
+     *
+     * @var array $cleanContent
+     */
+    $cleanContent = [];
     foreach ($menu_nav as $k => $m) {
       if (isset($m['#base_plugin_id']) && $m['#base_plugin_id'] === 'system_menu_block' && !$m['#in_preview']) {
         // set new theme.
-        $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_first_menu';
+        $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_dynamiques_headers';
         // add class
         $menu_nav[$k]['content']['#attributes'] = [
           'class' => [
@@ -137,36 +162,53 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
           $this->formatListMenus($menu_nav[$k]['content']['#items']);
           // dump($menu_nav[$k]['content']['#items']);
         }
+        $cleanContent[] = $menu_nav[$k]['content'];
       }
     }
-    return $menu_nav;
+    return $cleanContent;
+    // return $menu_nav;
   }
 
   /**
    *
    * {@inheritdoc}
    */
-  private function formatListMenus(array &$items) {
+  private function formatListMenus(array &$items, $firstLevel = true) {
+    $routeName = \Drupal::routeMatch()->getRouteName();
     foreach ($items as $k => $item) {
+      /**
+       *
+       * @var \Drupal\Core\Url $url
+       */
+      $url = $item['url'];
+      $menuRoute = $url->getRouteName();
+
       if (!empty($item['attributes'])) {
         /**
          *
          * @var \Drupal\Core\Template\Attribute $attribute
          */
         $attribute = $item['attributes'];
-        $attribute->addClass('nav-item');
+        $attribute->addClass('item');
         // add sub menu
         if ($item['is_expanded']) {
           $attribute->addClass('sub-alt');
         }
         // menu actif
         if ($item['in_active_trail']) {
-          $attribute->addClass('nav-item--active');
+          $attribute->addClass('is-active');
+        }
+        /**
+         * On essaie d'identifier la home page, car in_active_trail ne
+         * fonctionne pas dessus.
+         */
+        if ($routeName == 'view.frontpage.page_1' && ($menuRoute == '<front>' || $menuRoute == '/')) {
+          $attribute->addClass('is-active');
         }
         $items[$k]['attributes'] = $attribute;
         //
         if (!empty($item['below'])) {
-          $this->formatListMenus($item['below']);
+          $this->formatListMenus($item['below'], false);
           $items[$k]['below'] = $item['below'];
         }
       }

@@ -18,5 +18,26 @@ function bestlayouts_theme() {
     ],
     'file' => 'bestlayouts.theme.inc'
   ];
+  $hooks['layoutmenu_bestlayouts_dynamiques_headers'] = [
+    'render element' => 'element',
+    'preprocess functions' => [
+      'template_preprocess_layoutmenu_bestlayouts_dynamiques_headers'
+    ],
+    'file' => 'bestlayouts.theme.inc'
+  ];
+  $hooks['bestlayouts_form_search_style_merseille'] = [
+    'render element' => 'element',
+    'preprocess functions' => [
+      'template_preprocess_bestlayouts_form_search_style_merseille'
+    ],
+    'file' => 'bestlayouts.theme.inc'
+  ];
+  $hooks['input_submit_blm'] = [
+    'render element' => 'element',
+    'preprocess functions' => [
+      'template_preprocess_bestlayouts_input_submit_blm'
+    ],
+    'file' => 'bestlayouts.theme.inc'
+  ];
   return $hooks;
 }
