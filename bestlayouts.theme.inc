@@ -18,7 +18,7 @@ function template_preprocess_bestlayouts_form_search_style_merseille(&$vars){
 	if(!empty($vars['element']['actions']['submit'])){
 		$vars['element']['actions']['submit']['#theme_wrappers'][]='input_submit_blm';
 	}	
-	if($vars['element']['keys']){
+	if(!empty($vars['element']['keys'])){
 		$vars['element']['keys']['#attributes']['placeholder'] = $vars['element']['keys']['#attributes']['title'];
 		if(!empty($vars['element']['keys']['#attributes']['class'])){
 			$vars['element']['keys']['#attributes']['class'][] = 'blm-key-search';
