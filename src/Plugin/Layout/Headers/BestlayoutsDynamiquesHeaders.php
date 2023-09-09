@@ -136,11 +136,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
    * {@inheritdoc}
    */
   private function getMenus(array $menu_nav) {
-    /**
-     *
-     * @var \Drupal\Core\Url $dop
-     */
-    // $dop->toString();
+    $attributes = $menu_nav['#attributes'];
     /**
      * on retourne directement le menu sans passer par les blocks.
      *
@@ -152,11 +148,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
         // set new theme.
         $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_dynamiques_headers';
         // add class
-        $menu_nav[$k]['content']['#attributes'] = [
-          'class' => [
-            'nav-list'
-          ]
-        ];
+        $menu_nav[$k]['content']['#attributes'] = $attributes;
         // format-it if is not empty
         if (!empty($menu_nav[$k]['content']['#items'])) {
           $this->formatListMenus($menu_nav[$k]['content']['#items']);
