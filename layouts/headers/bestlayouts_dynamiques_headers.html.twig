@@ -16,8 +16,7 @@
 				</div>
 				{% endif %}
 				{% if content.header_top_right|has_value %}
-				<div
-					{{ region_attributes.header_top_right.addClass('header_top_right') }}>
+				<div {{ region_attributes.header_top_right.addClass('header_top_right') }}>
 					{{ content.header_top_right }}
 				</div>
 				{% endif %}
@@ -34,7 +33,11 @@
     				{{ content.logo }}
     			</div>
 			{% endif %}
-			{% if content.menu|has_value %}
+			{% if content.menu.layout_builder_add_block %}
+				<div {{ region_attributes.menu }}>
+					{{ content.menu }}
+				</div>
+			{% else  %}			
     			{{ content.menu }}
 			{% endif %}
 			{% if content.right_menu|has_value %}

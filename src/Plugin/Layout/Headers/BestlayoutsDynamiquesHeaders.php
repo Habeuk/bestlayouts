@@ -46,7 +46,7 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
-
+  
   /**
    *
    * {@inheritdoc}
@@ -57,7 +57,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $styles_group_manager);
     $this->pluginDefinition->set('icon', $this->pathResolver->getPath('module', 'bestlayouts') . "/icones/headers/bestlayouts_dynamiques_headers.png");
   }
-
+  
   function defaultConfiguration() {
     return [
       'containt_menu' => '',
@@ -69,7 +69,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       ]
     ] + parent::defaultConfiguration();
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -84,7 +84,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     ];
     return $form;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -94,7 +94,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     parent::submitConfigurationForm($form, $form_state);
     $this->configuration['containt_menu'] = $form_state->getValue('containt_menu');
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -110,10 +110,10 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     if ($build['search']) {
       $build['search'] = $this->FormatSearchForm($build['search']);
     }
-
+    
     return $build;
   }
-
+  
   /**
    *
    * @param array $searchs
@@ -135,7 +135,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     // dump($newSearchs);
     return $newSearchs;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -149,6 +149,10 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
      */
     $cleanContent = [];
     foreach ($menu_nav as $k => $m) {
+      // stop formatter if in preview.
+      if (!empty($m['#in_preview'])) {
+        return $menu_nav;
+      }
       if (isset($m['#base_plugin_id']) && $m['#base_plugin_id'] === 'system_menu_block' && !$m['#in_preview']) {
         // set new theme.
         $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_dynamiques_headers';
@@ -165,7 +169,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     return $cleanContent;
     // return $menu_nav;
   }
-
+  
   /**
    *
    * {@inheritdoc}
@@ -179,7 +183,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
        */
       $url = $item['url'];
       $menuRoute = $url->getRouteName();
-
+      
       if (!empty($item['attributes'])) {
         /**
          *
@@ -211,5 +215,5 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       }
     }
   }
-
+  
 }
