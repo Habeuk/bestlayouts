@@ -149,22 +149,41 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
      */
     $cleanContent = [];
     foreach ($menu_nav as $k => $m) {
-      // stop formatter if in preview.
+      // stop formatter if in preview, i.e si l'utilisateur est entrain de
+      // configurer le bloc.
       if (!empty($m['#in_preview'])) {
         return $menu_nav;
       }
-      if (isset($m['#base_plugin_id']) && $m['#base_plugin_id'] === 'system_menu_block' && !$m['#in_preview']) {
-        // set new theme.
-        $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_dynamiques_headers';
-        // add class
-        $menu_nav[$k]['content']['#attributes'] = $attributes;
-        // format-it if is not empty
-        if (!empty($menu_nav[$k]['content']['#items'])) {
-          $this->formatListMenus($menu_nav[$k]['content']['#items']);
-          // dump($menu_nav[$k]['content']['#items']);
+      
+      if (isset($m['#base_plugin_id']))
+        // cas ou on a directement injecte le menu.
+        if ($m['#base_plugin_id'] === 'system_menu_block') {
+          // set new theme.
+          $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_dynamiques_headers';
+          // add class
+          $menu_nav[$k]['content']['#attributes'] = $attributes;
+          // format-it if is not empty
+          if (!empty($menu_nav[$k]['content']['#items'])) {
+            $this->formatListMenus($menu_nav[$k]['content']['#items']);
+            // dump($menu_nav[$k]['content']['#items']);
+          }
+          $cleanContent[] = $menu_nav[$k]['content'];
         }
-        $cleanContent[] = $menu_nav[$k]['content'];
-      }
+        // si on passe par un champs.
+        elseif ($m['#base_plugin_id'] === 'field_block') {
+          $menu_nav[$k]['content']['#theme'] = 'layoutmenu_bestlayouts_dynamiques_headers';
+          // add class
+          $menu_nav[$k]['content']['#attributes'] = $attributes;
+          // format-it if is not empty
+          if (!empty($menu_nav[$k]['content']['#items'])) {
+            // il faudra faire ceci, autrement afin de supprimer [0].
+            $this->formatListMenus($menu_nav[$k]['content'][0]["#items"]);
+            // On ramene les elments à la racine.
+            $menu_nav[$k]['content']["#items"] = $menu_nav[$k]['content'][0]["#items"];
+          }
+          $cleanContent[] = $menu_nav[$k]['content'];
+          // return $menu_nav;
+        }
     }
     return $cleanContent;
     // return $menu_nav;
