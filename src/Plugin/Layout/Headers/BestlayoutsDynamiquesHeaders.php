@@ -114,6 +114,11 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     return $build;
   }
 
+  /**
+   *
+   * @param array $searchs
+   * @return string[]
+   */
   public function FormatSearchForm(array $searchs) {
     $newSearchs = [];
     $attributes = $searchs['#attributes'];

@@ -113,7 +113,6 @@ class BestlayoutsFacmasterHeaders extends FormatageModelsSection {
     if (is_array($build['menu'])) {
       $build['menu'] = $this->getMenus($build['menu']);
     }
-
     return $build;
   }
 
