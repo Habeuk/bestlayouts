@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @Layout(
  *   id = "bestlayouts_dynamiques_headers",
- *   label = @Translation(" Bestlayous : header"),
+ *   label = @Translation(" Bestlayous : dynamique header"),
  *   category = @Translation("bestlayouts"),
  *   path = "layouts/headers",
  *   template = "bestlayouts_dynamiques_headers",
@@ -82,6 +82,47 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       '#title' => $this->t('containt_menu'),
       '#default_value' => $this->configuration['containt_menu']
     ];
+    /**
+     * Configuration du menu.
+     */
+    $form['menu_config'] = [
+      '#type' => 'details',
+      '#title' => 'Configuration du menu',
+      '#open' => false
+    ];
+    $form['menu_config']['menu_static'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Menu static'),
+      '#default_value' => isset($this->configuration['menu_config']['menu_static']) ? $this->configuration['menu_config']['menu_static'] : '',
+      '#return_value' => 'menu-static'
+    ];
+    $form['menu_config']['bg-color'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Selectionner une couleur'),
+      '#options' => [
+        '' => 'Aucun',
+        'menu-bg-background' => 'Menu bg background',
+        'menu-bg-light' => 'Menu light'
+      ],
+      '#default_value' => isset($this->configuration['menu_config']['bg-color']) ? $this->configuration['menu_config']['bg-color'] : ''
+    ];
+    $form['menu_config']['items-position'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Position des items de menu'),
+      '#options' => [
+        '' => 'Equi-distant',
+        'menu-to-left' => 'Aligner à gauche',
+        'menu-to-right' => 'Aligner à droite',
+        'menu-to-center' => 'Aligner au centre'
+      ],
+      '#default_value' => isset($this->configuration['menu_config']['items-position']) ? $this->configuration['menu_config']['items-position'] : ''
+    ];
+    $form['menu_config']['menu_multiligne'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Menu multi-ligne'),
+      '#default_value' => isset($this->configuration['menu_config']['menu_multiligne']) ? $this->configuration['menu_config']['menu_multiligne'] : '',
+      '#return_value' => 'menu-multiligne'
+    ];
     return $form;
   }
   
@@ -93,6 +134,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
     $this->configuration['containt_menu'] = $form_state->getValue('containt_menu');
+    $this->configuration['menu_config'] = $form_state->getValue('menu_config');
   }
   
   /**
@@ -111,6 +153,12 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       $build['search'] = $this->FormatSearchForm($build['search']);
     }
     
+    if (!empty($this->configuration['menu_config'])) {
+      foreach ($this->configuration['menu_config'] as $value) {
+        if ($value)
+          $build['#attributes']['class'][] = $value;
+      }
+    }
     return $build;
   }
   

@@ -28,7 +28,6 @@
 {% macro menu_links(items, attributes, menu_level, show_icone_home) %}
 	{% import _self as menus %}
 	{% if items %}
-		{#{ dump(items) }#}
 		{% if menu_level == 0 %}
 			<ul {{attributes.addClass('hbk-mega-menu--items')}}>
 		{% else %}
