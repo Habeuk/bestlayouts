@@ -130,7 +130,16 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
         '#default_value' => $this->configuration['entity_after_login']
       ];
     }
-    
+    $form['model_display_enter_icon_before_login'] = [
+      '#type' => 'textarea',
+      '#title' => 'model_display_enter_icon_before_login',
+      '#default_value' => $this->configuration['model_display_enter_icon_before_login']
+    ];
+    $form['model_display_enter_icon_after_login'] = [
+      '#type' => 'textarea',
+      '#title' => 'model_display_enter_icon_before_login',
+      '#default_value' => $this->configuration['model_display_enter_icon_after_login']
+    ];
     return $form;
   }
   
@@ -188,6 +197,8 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $this->configuration['entity_before_login'] = $form_state->getValue('entity_before_login');
     $this->configuration['entity_after_login'] = $form_state->getValue('entity_after_login');
     $this->configuration['model_display_enter'] = $form_state->getValue('model_display_enter');
+    $this->configuration['model_display_enter_icon_before_login'] = $form_state->getValue('model_display_enter_icon_before_login');
+    $this->configuration['model_display_enter_icon_after_login'] = $form_state->getValue('model_display_enter_icon_after_login');
   }
   
 }
