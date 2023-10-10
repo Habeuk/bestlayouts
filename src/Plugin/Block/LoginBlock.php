@@ -115,11 +115,13 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $modes = [];
       $entities = $this->entityTypeManager->getStorage('entity_view_mode')->loadMultiple($ids);
       foreach ($entities as $entity) {
+        $mode = explode(".", $entity->id());
         /**
          *
          * @var \Drupal\Core\Entity\Entity\EntityViewMode $entity
          */
-        $modes[$entity->id()] = $entity->label();
+        if (!empty($mode[1]))
+          $modes[$mode[1]] = $entity->label();
       }
       $form['entity_after_login'] = [
         '#type' => 'select',
