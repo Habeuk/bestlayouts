@@ -39,5 +39,11 @@ function bestlayouts_theme() {
     ],
     'file' => 'bestlayouts.theme.inc'
   ];
+  $hooks['bestlayouts_login_block_icon_dropdown'] = [
+    'variables' => [
+      'svg_icon' => NULL,
+      'entity_render' => NULL
+    ]
+  ];
   return $hooks;
 }
