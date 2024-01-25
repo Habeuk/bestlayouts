@@ -249,7 +249,16 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
        * @var \Drupal\Core\Url $url
        */
       $url = $item['url'];
-      $menuRoute = $url->getRouteName();
+      /**
+       * On met dans un cache, car dans certaines conditions( quand on vient de
+       * supprimer un lien) Cela declenche : UnexpectedValueException
+       */
+      try {
+        $menuRoute = $url->getRouteName();
+      }
+      catch (\Exception $e) {
+        $menuRoute = null;
+      }
       
       if (!empty($item['attributes'])) {
         /**
