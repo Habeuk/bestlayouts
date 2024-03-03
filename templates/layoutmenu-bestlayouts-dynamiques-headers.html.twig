@@ -19,38 +19,28 @@
  *   - in_active_trail: TRUE if the link is in the active trail.
  */
 #}
-{% import _self as menus %}
+
 {#
   We call a macro which calls itself to render the full tree.
   @see http://twig.sensiolabs.org/doc/tags/macro.html
 #}
-{{ menus.menu_links(items, attributes, 0, show_icone_home) }}
 {% macro menu_links(items, attributes, menu_level, show_icone_home) %}
-	{% import _self as menus %}
-	{% if items %}
-		{% if menu_level == 0 %}
-			<ul {{attributes.addClass('hbk-mega-menu--items')}}>
-		{% else %}
-			<ul class="hbk-mega-menu--items__sub">
-        {% endif %}
+	{% if items %}		
+			<ul {% if menu_level == 0 %}{{attributes.addClass(['hbk-mega-menu--items'])}}{% else %} class="hbk-mega-menu--items__sub"{% endif %}>		
 			{% for item in items %}
 				{% set classes = [] %}
 				<li{{item.attributes.addClass(classes)}}>					
-					{% set link_classes = ['item-link',] %}
+					{% set link_classes = ['item-link'] %}
 					{% if item.below %}
 						{{ link(item.title, item.url, {'class': link_classes, 'data-toggle': 'dropdown', 'aria-expanded': 'false', 'aria-haspopup': 'true' }) }}
-						{{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+						{{ _self.menu_links(item.below, attributes, menu_level + 1) }}
 					{% else %}
-						{% if menu_level == 0 and loop.index == 1 and show_icone_home == true %}
-							<a href="/" class="item-link">
-								<i class="fa fa-home"></i>
-							</a>
-						{% else %}
-							{{ link(item.title, item.url, {'class': link_classes}) }}
-						{% endif %}
+            {{ link(item.title, item.url, {'class': link_classes}) }}
 					{% endif %}
 				</li>
 			{% endfor %}
 		</ul>
 	{% endif %}
 {% endmacro %}
+{{ _self.menu_links(items, attributes, 0, show_icone_home) }}
+
