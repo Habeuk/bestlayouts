@@ -91,10 +91,23 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       '#open' => false
     ];
     $form['menu_config']['menu_static'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Menu static'),
+      '#type' => 'select',
+      // '#type' => 'checkbox',
+      '#title' => $this->t(" Mode d'affichage "),
       '#default_value' => isset($this->configuration['menu_config']['menu_static']) ? $this->configuration['menu_config']['menu_static'] : '',
-      '#return_value' => 'menu-static'
+      // '#return_value' => 'menu-static'
+      '#options' => [
+        '' => 'None',
+        'menu-static' => 'Menu static',
+        'menu-static tablette' => 'Menu static on tablette (992)'
+      ]
+    ];
+    $form['menu_config']['not_cover_section'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t(" Not cover section "),
+      '#default_value' => isset($this->configuration['menu_config']['not_cover_section']) ? $this->configuration['menu_config']['not_cover_section'] : '',
+      '#return_value' => 'not-cover-section',
+      '#description' => "Permet de pousser le site en dessous du menu"
     ];
     $form['menu_config']['bg-color'] = [
       '#type' => 'select',
