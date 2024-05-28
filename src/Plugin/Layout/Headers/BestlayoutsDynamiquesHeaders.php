@@ -158,7 +158,14 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
   public function build(array $regions) {
     // TODO Auto-generated method stub
     $build = parent::build($regions);
+    /**
+     *
+     * @var \Drupal\bestlayouts\Plugin\Layout\Headers\BestlayoutsDynamiquesHeaders $layout
+     */
+    $layout = $build['#layout'];
+    
     FormatageModelsThemes::formatSettingValues($build);
+    
     if (is_array($build['menu'])) {
       $build['menu'] = $this->getMenus($build['menu']);
     }
@@ -182,18 +189,19 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
    */
   public function FormatSearchForm(array $searchs) {
     $newSearchs = [];
-    $attributes = $searchs['#attributes'];
-    foreach ($searchs as $search) {
+    // $attributes = $searchs['#attributes'];
+    foreach ($searchs as $key => $search) {
       if (!empty($search['#theme'])) {
-        if ($attributes)
-          $search['content']['#attributes'] = $attributes;
+        // if ($attributes)
+        // $search['content']['#attributes'] = $attributes;
         if (!empty($search['content']['#form_id']) && $search['content']['#form_id'] == 'search_block_form') {
           $search['content']['#theme'][] = 'bestlayouts_form_search_style_merseille';
+          $search['content']['#attributes']['class'][] = 'd-flex';
+          // dd($search['content']);
         }
-        $newSearchs[] = $search['content'];
       }
+      $newSearchs[$key] = $search;
     }
-    // dump($newSearchs);
     return $newSearchs;
   }
   

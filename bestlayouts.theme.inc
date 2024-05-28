@@ -18,6 +18,7 @@ function template_preprocess_layoutmenu_bestlayouts_dynamiques_headers(&$vars) {
 //
 function template_preprocess_bestlayouts_form_search_style_merseille(&$vars) {
   if (!empty($vars['element']['actions']['submit'])) {
+    
     $vars['element']['actions']['submit']['#theme_wrappers'][] = 'input_submit_blm';
   }
   if (!empty($vars['element']['keys'])) {
