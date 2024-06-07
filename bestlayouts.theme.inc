@@ -1,6 +1,5 @@
 <?php
-
-// use Drupal\Core\Render\Element;
+use Drupal\Core\Render\Element;
 
 // preprocess function for first menu nav
 function template_preprocess_layoutmenu_bestlayouts_first_menu(&$vars) {
@@ -10,8 +9,11 @@ function template_preprocess_layoutmenu_bestlayouts_first_menu(&$vars) {
 
 // preprocess function for first menu nav
 function template_preprocess_layoutmenu_bestlayouts_dynamiques_headers(&$vars) {
+  $vars['items'] = [];
+  if (!empty($vars['element']['#items'])) {
+    $vars['items'] = $vars['element']['#items'];
+  }
   $vars['attributes'] = $vars['element']['#attributes'];
-  $vars['items'] = $vars['element']['#items'];
   $vars['children'] = $vars['element']['#children'];
 }
 
