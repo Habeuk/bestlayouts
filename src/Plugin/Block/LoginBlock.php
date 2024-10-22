@@ -73,20 +73,13 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
   public function defaultConfiguration() {
     return [
       'model_display_enter' => 'icon_dropdown',
-      'proccess_options' => [
-        'block_content_render' => 'Block content render',
-        'user_render' => "Modele d'affichage de l'utilisateur",
-        'menu_render' => "Rendu via le menu",
-        'text_render' => "Texte",
-        'login_form' => "Formulaire de connexion"
-      ],
       'proccess_before' => [
-        'login' => 'login_form',
-        'data' => null
+        'login' => 'menu_render',
+        'data' => 'account'
       ],
       'proccess_after' => [
-        'login' => 'user_render',
-        'data' => null
+        'login' => 'menu_render',
+        'data' => 'account'
       ],
       'model_display_enter_icon_before_login' => '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M416 448h-84c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h84c17.7 0 32-14.3 32-32V160c0-17.7-14.3-32-32-32h-84c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h84c53 0 96 43 96 96v192c0 53-43 96-96 96zm-47-201L201 79c-15-15-41-4.5-41 17v96H24c-13.3 0-24 10.7-24 24v96c0 13.3 10.7 24 24 24h136v96c0 21.5 26 32 41 17l168-168c9.3-9.4 9.3-24.6 0-34z"/></svg>',
       'model_display_enter_icon_after_login' => '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>'
@@ -122,14 +115,22 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#type' => 'details',
       '#title' => 'Proccess before login',
       '#tree' => true,
-      '#open' => false
+      '#open' => true,
+      '#attributes' => [
+        'id' => 'id_proccess_before_select'
+      ]
     ];
     $form['proccess_before']['login'] = [
       '#type' => 'select',
       '#title' => t('Connection display'),
       '#options' => $this->configuration['proccess_options'],
       '#default_value' => $this->configuration['proccess_before']['login'],
-      '#required' => true
+      '#required' => true,
+      '#ajax' => [
+        'callback' => self::class . '::ProccessBeforeSelect',
+        'wrapper' => 'id_proccess_before_select',
+        'effect' => 'fade'
+      ]
     ];
     /**
      * On a une erreur avec $form_state->getValue('settings').
@@ -147,7 +148,10 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#type' => 'details',
       '#title' => 'Proccess after login',
       '#tree' => true,
-      '#open' => false
+      '#open' => true,
+      '#attributes' => [
+        'id' => 'id_proccess_after_select'
+      ]
     ];
     
     $form['proccess_after']['login'] = [
@@ -155,12 +159,14 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#title' => t('Connection display after'),
       '#options' => $this->configuration['proccess_options'],
       '#default_value' => $this->configuration['proccess_after']['login'],
-      '#required' => true
+      '#required' => true,
+      '#ajax' => [
+        'callback' => self::class . '::ProccessAfterSelect',
+        'wrapper' => 'id_proccess_after_select',
+        'effect' => 'fade'
+      ]
     ];
     $typeAfterLogin = !empty($settings['proccess_after']['login']) ? $settings['proccess_after']['login'] : $this->configuration['proccess_after']['login'];
-    if (empty($typeAfterLogin)) {
-      $typeAfterLogin = $this->configuration['proccess_after']['login'];
-    }
     if ($typeAfterLogin) {
       $this->buildSubForm($typeAfterLogin, $form, 'proccess_after');
     }
@@ -176,6 +182,14 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#default_value' => $this->configuration['model_display_enter_icon_after_login']
     ];
     return $form;
+  }
+  
+  public static function ProccessBeforeSelect($form, FormStateInterface $form_state) {
+    return $form['settings']['proccess_before'];
+  }
+  
+  public static function ProccessAfterSelect($form, FormStateInterface $form_state) {
+    return $form['settings']['proccess_after'];
   }
   
   /**
@@ -227,7 +241,11 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
               ]
             ];
             $tree = $this->menuTree->transform($tree, $manipulators);
-            $build['content']['data'] = $this->menuTree->build($tree);
+            $build['content']['data'] = [
+              '#theme' => 'bestlayouts_login_block_icon_dropdown',
+              '#svg_icon' => $this->configuration['model_display_enter_icon_after_login'],
+              '#entity_render' => $this->menuTree->build($tree)
+            ];
           }
           break;
         case 'user_render':
@@ -258,7 +276,8 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
           '#type' => 'text_format',
           '#title' => "Texte à afficher",
           '#required' => true,
-          '#default_value' => $this->configuration[$key]['data']
+          '#default_value' => !empty($this->configuration[$key]['data']['value']) ? $this->configuration[$key]['data']['value'] : $this->configuration[$key]['data'],
+          '#format' => !empty($this->configuration[$key]['data']['format']) ? $this->configuration[$key]['data']['format'] : 'full_html'
         ];
         break;
       case 'menu_render':
@@ -275,7 +294,7 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
           '#default_value' => $this->configuration[$key]['data']
         ];
         break;
-      case 'block_content':
+      case 'block_content_render':
         $block_contents = $this->entityTypeManager->getStorage('block_content')->loadMultiple();
         $block_contentOptions = [];
         foreach ($block_contents as $block_content) {
