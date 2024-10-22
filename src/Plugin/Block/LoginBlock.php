@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\Core\Menu\MenuLinkTree;
+use Drupal\Core\Form\SubformState;
 
 /**
  * Provides an exemple block.
@@ -95,6 +96,19 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    *
    * {@inheritdoc}
+   * @see \Drupal\Core\Block\BlockPluginInterface::blockSubmit()
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['model_display_enter'] = $form_state->getValue('model_display_enter');
+    $this->configuration['proccess_before'] = $form_state->getValue('proccess_before');
+    $this->configuration['proccess_after'] = $form_state->getValue('proccess_after');
+    $this->configuration['model_display_enter_icon_before_login'] = $form_state->getValue('model_display_enter_icon_before_login');
+    $this->configuration['model_display_enter_icon_after_login'] = $form_state->getValue('model_display_enter_icon_after_login');
+  }
+  
+  /**
+   *
+   * {@inheritdoc}
    * @see \Drupal\Core\Block\BlockPluginInterface::blockForm()
    */
   public function blockForm($form, $form_state) {
@@ -117,13 +131,15 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#default_value' => $this->configuration['proccess_before']['login'],
       '#required' => true
     ];
-    $typeLogin = $form_state->getValue([
-      'proccess_before',
-      'login'
-    ]);
-    if (empty($typeLogin)) {
-      $typeLogin = $this->configuration['proccess_before']['login'];
+    /**
+     * On a une erreur avec $form_state->getValue('settings').
+     *
+     * @see https://www.drupal.org/project/drupal/issues/2798261#comment-12735075
+     */
+    if ($form_state instanceof SubformState) {
+      $settings = $form_state->getCompleteFormState()->getValue('settings');
     }
+    $typeLogin = !empty($settings['proccess_before']['login']) ? $settings['proccess_before']['login'] : $this->configuration['proccess_before']['login'];
     if ($typeLogin) {
       $this->buildSubForm($typeLogin, $form, 'proccess_before');
     }
@@ -141,10 +157,7 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#default_value' => $this->configuration['proccess_after']['login'],
       '#required' => true
     ];
-    $typeAfterLogin = $form_state->getValue([
-      'proccess_after',
-      'login'
-    ]);
+    $typeAfterLogin = !empty($settings['proccess_after']['login']) ? $settings['proccess_after']['login'] : $this->configuration['proccess_after']['login'];
     if (empty($typeAfterLogin)) {
       $typeAfterLogin = $this->configuration['proccess_after']['login'];
     }
@@ -236,19 +249,6 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
           break;
       }
     return $build;
-  }
-  
-  /**
-   *
-   * {@inheritdoc}
-   * @see \Drupal\Core\Block\BlockPluginInterface::blockSubmit()
-   */
-  public function blockSubmit($form, FormStateInterface $form_state) {
-    $this->configuration['entity_before_login'] = $form_state->getValue('entity_before_login');
-    $this->configuration['entity_after_login'] = $form_state->getValue('entity_after_login');
-    $this->configuration['model_display_enter'] = $form_state->getValue('model_display_enter');
-    $this->configuration['model_display_enter_icon_before_login'] = $form_state->getValue('model_display_enter_icon_before_login');
-    $this->configuration['model_display_enter_icon_after_login'] = $form_state->getValue('model_display_enter_icon_after_login');
   }
   
   protected function buildSubForm($typeLogin, &$form, $key = 'proccess_before') {
