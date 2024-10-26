@@ -123,7 +123,7 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $form['proccess_before']['login'] = [
       '#type' => 'select',
       '#title' => t('Connection display'),
-      '#options' => $this->configuration['proccess_options'],
+      '#options' => $this->getProccessOptions(),
       '#default_value' => $this->configuration['proccess_before']['login'],
       '#required' => true,
       '#ajax' => [
@@ -157,7 +157,7 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
     $form['proccess_after']['login'] = [
       '#type' => 'select',
       '#title' => t('Connection display after'),
-      '#options' => $this->configuration['proccess_options'],
+      '#options' => $this->getProccessOptions(),
       '#default_value' => $this->configuration['proccess_after']['login'],
       '#required' => true,
       '#ajax' => [
@@ -339,5 +339,15 @@ class LoginBlock extends BlockBase implements ContainerFactoryPluginInterface {
         ;
         break;
     }
+  }
+  
+  protected function getProccessOptions() {
+    return [
+      'block_content_render' => 'Block content render',
+      'user_render' => "Modele d'affichage de l'utilisateur",
+      'menu_render' => "Rendu via le menu",
+      'text_render' => "Texte",
+      'login_form' => "Formulaire de connexion"
+    ];
   }
 }
