@@ -66,7 +66,8 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
         'options' => [
           'style-merseille' => 'style-merseille'
         ]
-      ]
+      ],
+      'use_old_render' => TRUE // doit etre supprimer à la version 2x
     ] + parent::defaultConfiguration();
   }
   
@@ -136,6 +137,14 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       '#default_value' => isset($this->configuration['menu_config']['menu_multiligne']) ? $this->configuration['menu_config']['menu_multiligne'] : '',
       '#return_value' => 'menu-multiligne'
     ];
+    // @deprecier, serra supprimser à la version 2x.
+    $form['use_old_render'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use old render'),
+      '#default_value' => isset($this->configuration['use_old_render']) ? $this->configuration['use_old_render'] : '',
+      "#description" => t("IMPORTANT : You need to uncheck this field and use <strong>'MegaMenu display cover'</strong> rendering field for menu rendering. "),
+      '#return_value' => 'menu-multiligne'
+    ];
     return $form;
   }
   
@@ -148,6 +157,7 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
     parent::submitConfigurationForm($form, $form_state);
     $this->configuration['containt_menu'] = $form_state->getValue('containt_menu');
     $this->configuration['menu_config'] = $form_state->getValue('menu_config');
+    $this->configuration['use_old_render'] = $form_state->getValue('use_old_render');
   }
   
   /**
@@ -158,27 +168,29 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
   public function build(array $regions) {
     // TODO Auto-generated method stub
     $build = parent::build($regions);
-    /**
-     *
-     * @var \Drupal\bestlayouts\Plugin\Layout\Headers\BestlayoutsDynamiquesHeaders $layout
-     */
-    $layout = $build['#layout'];
-    
     FormatageModelsThemes::formatSettingValues($build);
-    
-    if (is_array($build['menu'])) {
-      $build['menu'] = $this->getMenus($build['menu']);
-    }
-    if ($build['search']) {
-      $build['search'] = $this->FormatSearchForm($build['search']);
-    }
-    
-    if (!empty($this->configuration['menu_config'])) {
-      foreach ($this->configuration['menu_config'] as $value) {
-        if ($value)
-          $build['#attributes']['class'][] = $value;
+    if ($this->configuration['use_old_render']) {
+      /**
+       *
+       * @var \Drupal\bestlayouts\Plugin\Layout\Headers\BestlayoutsDynamiquesHeaders $layout
+       */
+      $layout = $build['#layout'];
+      
+      if (is_array($build['menu'])) {
+        $build['menu'] = $this->getMenus($build['menu']);
+      }
+      if ($build['search']) {
+        $build['search'] = $this->FormatSearchForm($build['search']);
+      }
+      
+      if (!empty($this->configuration['menu_config'])) {
+        foreach ($this->configuration['menu_config'] as $value) {
+          if ($value)
+            $build['#attributes']['class'][] = $value;
+        }
       }
     }
+    
     return $build;
   }
   
@@ -231,7 +243,6 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       if (!empty($m['#in_preview'])) {
         return $menu_nav;
       }
-      
       if (isset($m['#base_plugin_id']))
         // cas ou on a directement injecte le menu.
         if ($m['#base_plugin_id'] === 'system_menu_block') {
@@ -331,5 +342,4 @@ class BestlayoutsDynamiquesHeaders extends FormatageModelsSection {
       }
     }
   }
-  
 }

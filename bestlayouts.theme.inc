@@ -10,11 +10,16 @@ function template_preprocess_layoutmenu_bestlayouts_first_menu(&$vars) {
 // preprocess function for first menu nav
 function template_preprocess_layoutmenu_bestlayouts_dynamiques_headers(&$vars) {
   $vars['items'] = [];
-  if (!empty($vars['element']['#items'])) {
+  if (!empty($vars['element']['#items']) && is_array($vars['element']['#items'])) {
     $vars['items'] = $vars['element']['#items'];
   }
-  $vars['attributes'] = $vars['element']['#attributes'];
-  $vars['children'] = $vars['element']['#children'];
+  elseif ($vars['element'][0]['#items']) {
+    $vars['items'] = $vars['element'][0]['#items'];
+  }
+  if (isset($vars['element']['#attributes']))
+    $vars['attributes'] = $vars['element']['#attributes'];
+  if (isset($vars['element']['#children']))
+    $vars['children'] = $vars['element']['#children'];
 }
 
 //
