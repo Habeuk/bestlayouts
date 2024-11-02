@@ -1,0 +1,5 @@
+btly_megamenus.add_form:
+  title: 'Add megamenus'
+  route_name: entity.btly_megamenus.add_form
+  appears_on:
+    - entity.btly_megamenus.collection

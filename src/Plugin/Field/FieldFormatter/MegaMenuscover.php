@@ -4,6 +4,7 @@ namespace Drupal\bestlayouts\Plugin\Field\FieldFormatter;
 
 use Drupal\more_fields\Plugin\Field\FieldFormatter\MoreFieldsMenuFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Plugin implementation of the 'entity reference label' formatter.
@@ -11,7 +12,7 @@ use Drupal\Core\Field\FieldItemListInterface;
  *
  * @FieldFormatter(
  *   id = "bestlayouts_megamenu_cover",
- *   label = @Translation("MegaMenu display cover"),
+ *   label = @Translation("MegaMenu display"),
  *   description = @Translation("Display the label of the referenced entities."),
  *   field_types = {
  *     "entity_reference"
@@ -20,14 +21,41 @@ use Drupal\Core\Field\FieldItemListInterface;
  */
 class MegaMenuscover extends MoreFieldsMenuFormatter {
   
+  public static function defaultSettings() {
+    return [
+      'theme_render' => 'layoutmenu_bestlayouts_dynamiques_headers',
+      'text_display' => true
+    ] + parent::defaultSettings();
+  }
+  
+  /**
+   *
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    return [
+      'theme_render' => [
+        '#type' => 'select',
+        '#title' => $this->t('Select render model'),
+        '#default_value' => $this->getSetting('theme_render'),
+        '#required' => true,
+        '#options' => [
+          'layoutmenu_bestlayouts_dynamiques_headers' => 'Rendu avec les sous menu',
+          'bestlayouts_megamenu' => 'Rendu MegaMenu'
+        ]
+      ]
+    ] + parent::settingsForm($form, $form_state);
+  }
+  
   /**
    *
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = parent::viewElements($items, $langcode);
+    $theme_render = $this->getSetting('theme_render');
     foreach ($elements as &$element) {
-      $element["#theme"] = "layoutmenu_bestlayouts_dynamiques_headers";
+      $element["#theme"] = $theme_render;
       $this->formatListMenus($element['#items']);
     }
     return $elements;

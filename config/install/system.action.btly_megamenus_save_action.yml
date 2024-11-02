@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - bestlayouts
+id: btly_megamenus_save_action
+label: 'Save megameni'
+type: btly_megamenus
+plugin: entity:save_action:btly_megamenus
+configuration: {  }

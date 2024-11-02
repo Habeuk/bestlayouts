@@ -1,4 +1,7 @@
 <?php
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  *
@@ -7,9 +10,38 @@
  */
 
 /**
+ * implement hook_entity_base_field_info
+ *
+ * @param EntityTypeInterface $entity_type
+ */
+function bestlayouts_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+  if ($entity_type->id() == 'menu_link_content') {
+    $fields["btly_megamenus_layout"] = BaseFieldDefinition::create('entity_reference')->setLabel(t(" Layouts "))->setDescription(t("Select the entities to display at the menu level"))->setCardinality(
+      FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)->setTranslatable(false)->setDisplayOptions('form',
+      [
+        'type' => 'select2_entity_reference',
+        'weight' => 0,
+        'settings' => [
+          'autocomplete' => true
+        ]
+      ])->setSetting("handler_settings", [
+      "auto_create" => true
+    ])->setSetting("handler", "default")->setSetting("target_type", "btly_megamenus")->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'entity_reference_revisions_entity_view'
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE);
+  }
+  return $fields;
+}
+
+/**
  * Implements hook_theme().
  */
 function bestlayouts_theme() {
+  $hooks['btly_megamenus'] = [
+    'render element' => 'elements'
+  ];
   // pre-formatage et template pour le menu.
   $hooks['layoutmenu_bestlayouts_first_menu'] = [
     'render element' => 'element',
@@ -24,6 +56,9 @@ function bestlayouts_theme() {
       'template_preprocess_layoutmenu_bestlayouts_dynamiques_headers'
     ],
     'file' => 'bestlayouts.theme.inc'
+  ];
+  $hooks['bestlayouts_megamenu'] = [
+    'render element' => 'element'
   ];
   $hooks['bestlayouts_form_search_style_merseille'] = [
     'render element' => 'element',
@@ -46,4 +81,65 @@ function bestlayouts_theme() {
     ]
   ];
   return $hooks;
+}
+use Drupal\Core\Render\Element;
+use Drupal\user\UserInterface;
+
+/**
+ * Prepares variables for megamenus templates.
+ *
+ * Default template: btly-megamenus.html.twig.
+ *
+ * @param array $variables
+ *        An associative array containing:
+ *        - elements: An associative array containing the megamenus information
+ *        and any
+ *        fields attached to the entity.
+ *        - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_btly_megamenus(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Implements hook_user_cancel().
+ */
+function bestlayouts_user_cancel($edit, UserInterface $account, $method): void {
+  switch ($method) {
+    case 'user_cancel_block_unpublish':
+      // Unpublish megameni.
+      $storage = \Drupal::entityTypeManager()->getStorage('btly_megamenus');
+      $btly_megamenus_ids = $storage->getQuery()->condition('uid', $account->id())->condition('status', 1)->accessCheck(FALSE)->execute();
+      foreach ($storage->loadMultiple($btly_megamenus_ids) as $btly_megamenus) {
+        $btly_megamenus->set('status', FALSE)->save();
+      }
+      break;
+    
+    case 'user_cancel_reassign':
+      // Anonymize megameni.
+      $storage = \Drupal::entityTypeManager()->getStorage('btly_megamenus');
+      $btly_megamenus_ids = $storage->getQuery()->condition('uid', $account->id())->accessCheck(FALSE)->execute();
+      foreach ($storage->loadMultiple($btly_megamenus_ids) as $btly_megamenus) {
+        $btly_megamenus->setOwnerId(0)->save();
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete() for user entities.
+ */
+function bestlayouts_user_predelete(UserInterface $account): void {
+  // Delete megameni that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('btly_megamenus');
+  $btly_megamenus_ids = $storage->getQuery()->condition('uid', $account->id())->accessCheck(FALSE)->execute();
+  $storage->delete($storage->loadMultiple($btly_megamenus_ids));
+  // Delete old revisions.
+  $btly_megamenus_ids = $storage->getQuery()->allRevisions()->condition('uid', $account->id())->accessCheck(FALSE)->execute();
+  foreach (array_keys($btly_megamenus_ids) as $revision_id) {
+    $storage->deleteRevision($revision_id);
+  }
 }

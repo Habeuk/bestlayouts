@@ -2,3 +2,7 @@ administer bestlayouts configuration:
   title: 'Administer bestlayouts configuration'
   description: 'Optional description.'
   restrict access: true
+
+administer btly_megamenus:
+  title: 'Administer megameni'
+  restrict access: true

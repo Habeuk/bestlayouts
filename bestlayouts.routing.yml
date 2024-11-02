@@ -13,3 +13,11 @@ bestlayouts.settings_form:
     _form: 'Drupal\bestlayouts\Form\SettingsForm'
   requirements:
     _permission: 'administer bestlayouts configuration'
+
+entity.btly_megamenus.settings:
+  path: 'admin/structure/btly-megamenus'
+  defaults:
+    _form: '\Drupal\bestlayouts\Form\MegaMenusSettingsForm'
+    _title: 'MegaMenus'
+  requirements:
+    _permission: 'administer btly_megamenus'

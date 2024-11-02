@@ -1,0 +1,10 @@
+entity.btly_megamenus.edit_form:
+  route_name: entity.btly_megamenus.edit_form
+  group: btly_megamenus
+  title: 'Edit'
+
+entity.btly_megamenus.delete_form:
+  route_name: entity.btly_megamenus.delete_form
+  group: btly_megamenus
+  title: 'Delete'
+  weight: 10

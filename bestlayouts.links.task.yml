@@ -1,0 +1,22 @@
+entity.btly_megamenus.settings:
+  title: 'Settings'
+  route_name: entity.btly_megamenus.settings
+  base_route: entity.btly_megamenus.settings
+entity.btly_megamenus.view:
+  title: 'View'
+  route_name: entity.btly_megamenus.canonical
+  base_route: entity.btly_megamenus.canonical
+entity.btly_megamenus.edit_form:
+  title: 'Edit'
+  route_name: entity.btly_megamenus.edit_form
+  base_route: entity.btly_megamenus.canonical
+entity.btly_megamenus.delete_form:
+  title: 'Delete'
+  route_name: entity.btly_megamenus.delete_form
+  base_route: entity.btly_megamenus.canonical
+  weight: 10
+entity.btly_megamenus.collection:
+  title: 'MegaMeni'
+  route_name: entity.btly_megamenus.collection
+  base_route: system.admin_content
+  weight: 10
