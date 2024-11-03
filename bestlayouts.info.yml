@@ -1,5 +1,7 @@
 name: bestlayouts
 type: module
-description: fournit de tres jolie modeles de layout y compris des paragraphes pre-definits
+description: provides very nice layout templates including pre-defined paragraphs
 package: Custom
 core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:select2

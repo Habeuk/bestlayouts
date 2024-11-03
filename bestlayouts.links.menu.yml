@@ -6,13 +6,15 @@ bestlayouts.settings_form:
   weight: 10
 
 entity.btly_megamenus.settings:
-  title: 'MegaMenus'
+  title: 'MegaMenus settings'
   description: 'Configure a MegaMenus entity type.'
   route_name:  entity.btly_megamenus.settings
-  parent: system.admin_structure
+  parent: entity.menu.collection
+  weight: -1
 
 entity.btly_megamenus.collection:
-  title: 'MegaMeni'
-  description: 'List of megameni.'
+  title: 'MegaMenus content'
+  description: 'List of megamenu.'
   route_name: entity.btly_megamenus.collection
-  parent: system.admin_content
+  parent: entity.menu.collection
+  weight: -1
