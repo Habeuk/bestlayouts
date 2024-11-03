@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
  * Defines the megamenus entity class.
@@ -103,11 +104,7 @@ final class MegaMenus extends RevisionableContentEntityBase implements MegaMenus
       'form', [
         'type' => 'string_textfield',
         'weight' => -5
-      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('view', [
-      'label' => 'hidden',
-      'type' => 'string',
-      'weight' => -5
-    ])->setDisplayConfigurable('view', TRUE);
+      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('view', [])->setDisplayConfigurable('view', TRUE);
     
     $fields['status'] = BaseFieldDefinition::create('boolean')->setRevisionable(TRUE)->setLabel(t('Status'))->setDefaultValue(TRUE)->setSetting('on_label', 'Enabled')->setDisplayOptions('form',
       [
@@ -116,14 +113,7 @@ final class MegaMenus extends RevisionableContentEntityBase implements MegaMenus
           'display_label' => FALSE
         ],
         'weight' => 0
-      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('view', [
-      'type' => 'boolean',
-      'label' => 'above',
-      'weight' => 0,
-      'settings' => [
-        'format' => 'enabled-disabled'
-      ]
-    ])->setDisplayConfigurable('view', TRUE);
+      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('view', [])->setDisplayConfigurable('view', TRUE);
     
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')->setRevisionable(TRUE)->setTranslatable(TRUE)->setLabel(t('Author'))->setSetting('target_type', 'user')->setDefaultValueCallback(
       self::class . '::getDefaultEntityOwner')->setDisplayOptions('form',
@@ -135,21 +125,23 @@ final class MegaMenus extends RevisionableContentEntityBase implements MegaMenus
           'placeholder' => ''
         ],
         'weight' => 15
-      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('view', [
-      'label' => 'above',
-      'type' => 'author',
-      'weight' => 15
-    ])->setDisplayConfigurable('view', TRUE);
+      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('view', [])->setDisplayConfigurable('view', TRUE);
     
     $fields['created'] = BaseFieldDefinition::create('created')->setLabel(t('Authored on'))->setTranslatable(TRUE)->setDescription(t('The time that the megamenus was created.'))->setDisplayOptions(
-      'view', [
-        'label' => 'above',
-        'type' => 'timestamp',
-        'weight' => 20
-      ])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('form', [
+      'view', [])->setDisplayConfigurable('form', TRUE)->setDisplayOptions('form', [
       'type' => 'datetime_timestamp',
       'weight' => 20
     ])->setDisplayConfigurable('view', TRUE);
+    
+    $fields['paragraph_revisions'] = BaseFieldDefinition::create('entity_reference_revisions')->setLabel(t(' Sections entities revision '))->setCardinality(
+      FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)->setDisplayOptions('form', [
+      'type' => 'paragraphs',
+      'weight' => 0
+    ])->setDisplayConfigurable('form', TRUE)->setDisplayConfigurable('view', TRUE)->setSetting('target_type', 'paragraph')->setSetting('handler', 'default')->setTranslatable(false)->setSetting(
+      'allow_duplicate', true)->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'entity_reference_revisions_entity_view'
+    ]);
     
     $fields['changed'] = BaseFieldDefinition::create('changed')->setLabel(t('Changed'))->setTranslatable(TRUE)->setDescription(t('The time that the megamenus was last edited.'));
     
