@@ -53,6 +53,7 @@ class MegaMenuscover extends MoreFieldsMenuFormatter {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = parent::viewElements($items, $langcode);
+    
     $theme_render = $this->getSetting('theme_render');
     foreach ($elements as &$element) {
       $element["#theme"] = $theme_render;

@@ -58,7 +58,11 @@ function bestlayouts_theme() {
     'file' => 'bestlayouts.theme.inc'
   ];
   $hooks['bestlayouts_megamenu'] = [
-    'render element' => 'element'
+    'render element' => 'element',
+    'preprocess functions' => [
+      'template_preprocess_bestlayouts_megamenu'
+    ],
+    'file' => 'bestlayouts.theme.inc'
   ];
   $hooks['bestlayouts_form_search_style_merseille'] = [
     'render element' => 'element',

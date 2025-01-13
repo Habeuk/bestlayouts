@@ -22,6 +22,13 @@ function template_preprocess_layoutmenu_bestlayouts_dynamiques_headers(&$vars) {
     $vars['children'] = $vars['element']['#children'];
 }
 
+function template_preprocess_bestlayouts_megamenu(&$vars) {
+  $vars['items'] = [];
+  if (!empty($vars['element']['#items'])) {
+    $vars['items'] = $vars['element']['#items'];
+  }
+}
+
 //
 function template_preprocess_bestlayouts_form_search_style_merseille(&$vars) {
   if (!empty($vars['element']['actions']['submit'])) {
