@@ -29,6 +29,25 @@ function template_preprocess_bestlayouts_megamenu(&$vars) {
   }
 }
 
+/**
+ * Prepares variables for megamenus templates.
+ *
+ * Default template: btly-megamenus.html.twig.
+ *
+ * @param array $variables
+ *        An associative array containing:
+ *        - elements: An associative array containing the megamenus information
+ *        and any
+ *        fields attached to the entity.
+ *        - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_btly_megamenus(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
 //
 function template_preprocess_bestlayouts_form_search_style_merseille(&$vars) {
   if (!empty($vars['element']['actions']['submit'])) {

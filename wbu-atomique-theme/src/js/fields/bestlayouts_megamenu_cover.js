@@ -1,0 +1,2 @@
+import "@stephane888/wbu-atomique/scss/drupal/modules/bestlayouts/field/bestlayouts_megamenu_cover/bestlayouts_megamenu_cover.js";
+import "@stephane888/wbu-atomique/scss/drupal/modules/bestlayouts/field/bestlayouts_megamenu_cover/bestlayouts_megamenu_cover.scss";
