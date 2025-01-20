@@ -33,12 +33,10 @@
     				{{ content.logo }}
     			</div>
 			{% endif %}
-			{% if content.menu.layout_builder_add_block %}
+			{% if content.menu|has_value %}
 				<div {{ region_attributes.menu }}>
 					{{ content.menu }}
 				</div>
-			{% else  %}			
-    			{{ content.menu }}
 			{% endif %}
 			{% if content.right_menu|has_value %}
     			<div {{ region_attributes.right_menu.addClass('right_menu') }}>

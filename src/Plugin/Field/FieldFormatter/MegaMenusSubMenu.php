@@ -76,7 +76,7 @@ class MegaMenusSubMenu extends MoreFieldsMenuFormatter {
          * @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $original_link
          */
         $original_link = $item['original_link'];
-        if ($original_link->getEntity()->hasField('btly_megamenus_layout')) {
+        if ($original_link instanceof \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent && $original_link->getEntity()->hasField('btly_megamenus_layout')) {
           $ids = [];
           foreach ($original_link->getEntity()->get('btly_megamenus_layout')->getValue() as $value) {
             $ids[] = $value['target_id'];
