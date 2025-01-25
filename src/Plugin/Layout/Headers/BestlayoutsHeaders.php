@@ -153,6 +153,13 @@ class BestlayoutsHeaders extends FormatageModelsSection {
     // TODO Auto-generated method stub
     $build = parent::build($regions);
     FormatageModelsThemes::formatSettingValues($build);
+    //
+    if (!empty($this->configuration['menu_config'])) {
+      foreach ($this->configuration['menu_config'] as $value) {
+        if ($value)
+          $build['#attributes']['class'][] = $value;
+      }
+    }
     return $build;
   }
 }

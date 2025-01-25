@@ -27,7 +27,7 @@
 		</div>
 	</div>
 	<div {% if settings.config_section %}
-		class="hbk-mega-menu {{ settings.config_section.type_container }} {{ settings.config_section.container_class }}"
+		class="hbk-mega-menu style-merseille d-flex {{ settings.config_section.type_container }} {{ settings.config_section.container_class }}"
 		{% else %} class="container" {% endif %}>
 		{% if content.logo|has_value %}
 		<div {{ region_attributes.logo.addClass('logo','block-logo') }}>

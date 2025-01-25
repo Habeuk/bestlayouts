@@ -27,7 +27,7 @@
 		La structure des menus est fortement liée de la derivée.
 	#}	
 	{% if settings.derivate.value == "style-merseille" %}
-		<div {% if settings.config_section %} class="hbk-mega-menu {{ settings.derivate.value }} {{ settings.config_section.type_container }} {{ settings.config_section.container_class }}" {% else %} class="container" {% endif %}>
+		<div {% if settings.config_section %} class="hbk-mega-menu  {{ settings.derivate.value }} {{ settings.config_section.type_container }} {{ settings.config_section.container_class }}" {% else %} class="container" {% endif %}>
 			{% if content.logo|has_value %}
     			<div {{ region_attributes.logo.addClass('logo','block-logo') }}>
     				{{ content.logo }}
