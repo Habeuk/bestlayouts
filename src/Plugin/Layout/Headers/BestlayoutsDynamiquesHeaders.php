@@ -12,9 +12,15 @@ use Drupal\Core\Form\FormStateInterface;
  * Ce menu a pour objectif d'etre le plus dynamique possible.
  * il permet de gerer entirement l'entete d'un site.
  *
+ * @deprecated , retirer lors de la prochaine 2x, use bestlayouts_headers. il
+ *             faudra mettre en place un hoo_update_N afin de prendre en compte
+ *             les differentes modifications.
+ *            
+ *            
+ *            
  * @Layout(
  *   id = "bestlayouts_dynamiques_headers",
- *   label = @Translation(" Bestlayous : dynamique header"),
+ *   label = @Translation(" @deprecated use 'Bestlayous : headers'. Bestlayous : dynamique header. "),
  *   category = @Translation("bestlayouts"),
  *   path = "layouts/headers",
  *   template = "bestlayouts_dynamiques_headers",
