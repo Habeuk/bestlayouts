@@ -4,4 +4,6 @@ description: provides very nice layout templates including pre-defined paragraph
 package: Custom
 core_version_requirement: ^9 || ^10
 dependencies:
+  - entity_reference_revisions:entity_reference_revisions
   - drupal:select2
+
