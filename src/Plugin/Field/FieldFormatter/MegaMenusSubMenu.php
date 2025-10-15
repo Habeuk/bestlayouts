@@ -58,6 +58,18 @@ class MegaMenusSubMenu extends MoreFieldsMenuFormatter {
     foreach ($elements as &$element) {
       $element["#theme"] = $theme_render;
       $this->formatListMenus($element['#items'], $langcode);
+      // Cache très spécifique pour les menus mega
+      $element['#cache'] = [
+        'contexts' => [
+          'url.path',
+          'user.roles',
+          'languages:language_interface'
+        ],
+        'tags' => [
+          'field:' . $items->getFieldDefinition()->getName() . ':' . $items->getEntity()->id(),
+          'mega_menu:' . $items->getEntity()->id()
+        ]
+      ];
     }
     return $elements;
   }
