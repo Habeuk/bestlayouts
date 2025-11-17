@@ -32,7 +32,7 @@
 				<li{{item.attributes.addClass(classes)}}>					
 					{% set link_classes = ['item-link'] %}
 					{% if item.below %}
-						{{ link(item.title, item.url, {'class': link_classes, 'data-toggle': 'dropdown', 'aria-expanded': 'false', 'aria-haspopup': 'true' }) }}
+						{{ link(item.title, item.url, {'class': link_classes, 'data-toggle': 'dropdown'}) }}
 						{{ _self.menu_links(item.below, attributes, menu_level + 1) }}
 					{% else %}
             {{ link(item.title, item.url, {'class': link_classes}) }}
